@@ -1,0 +1,83 @@
+# -------------------------------------------------
+# Laravel / PHP
+# -------------------------------------------------
+/vendor/
+/storage/*.key
+/storage/app/public/
+/storage/app/private/
+/storage/framework/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+/bootstrap/cache/
+
+/public/storage
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# PHP Unit
+.phpunit.result.cache
+/.phpunit.cache/
+
+# Auth & credentials files
+auth.json
+
+# -------------------------------------------------
+# Node / Frontend (Vite / Mix / Tailwind)
+# -------------------------------------------------
+/node_modules/
+/public/build/
+/public/hot/
+/public/mix-manifest.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# -------------------------------------------------
+# Cache / Runtime / Temporary
+# -------------------------------------------------
+*.log
+*.cache
+*.tmp
+*.swp
+*.swo
+
+# -------------------------------------------------
+# IDE / Editors
+# -------------------------------------------------
+/.idea/
+/.vscode/
+/.fleet/
+
+# -------------------------------------------------
+# OS files
+# -------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -------------------------------------------------
+# Homestead / Laravel Valet
+# -------------------------------------------------
+Homestead.json
+Homestead.yaml
+
+# -------------------------------------------------
+# Debugging / profiler dumps
+# -------------------------------------------------
+*.dump
+*.sql
+
+# -------------------------------------------------
+# Optional: if you use Docker
+# -------------------------------------------------
+docker-compose.override.yml
+*.env.docker
