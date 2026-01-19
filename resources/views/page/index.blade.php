@@ -27,14 +27,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap"
     rel="stylesheet">
 
   <style>
+    /* CSS Variable for dynamic header height */
+    :root {
+      --header-h: 80px;
+      scroll-padding-top: var(--header-h);
+    }
+    
+    html {
+      scroll-padding-top: var(--header-h);
+    }
+
+    /* ✅ HERO SLIDES */
+    .hero-frame {
+      opacity: 0;
+      transition: opacity 1800ms ease;
+    }
+
+    .hero-frame.active {
+      opacity: 1;
+    }
+
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Manrope', system-ui, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
     }
 
     h1,
@@ -43,75 +65,134 @@
     h4,
     h5,
     h6 {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* ✅ NAV active pill */
+    .nav-link {
+      padding: 8px 12px;
+      border-radius: 9999px;
+      position: relative;
+    }
+
+    .nav-link.active {
+      color: #fff !important;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .14);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-link-mobile.active {
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    /* FIX: Hero title typewriter text wrapping
+     * PROBLEMA: max-width: 20ch causaba que el texto se cortara durante la animación
+     * ("con Mentore…") porque forzaba wrapping antes de terminar de escribir.
+     * SOLUCIÓN:
+     * - Removido max-width: 20ch
+     * - Desktop (md+): white-space: nowrap para evitar cortes durante typewriter
+     * - Mobile (<md): white-space: normal para permitir wrap y evitar desborde
+     * - min-height reserva espacio para evitar "saltos" de layout al cambiar slides
+     */
+    .hero-title {
+      /* FIX: Reservar altura fija para 2-3 líneas, evita saltos al cambiar texto */
+      min-height: 140px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        min-height: 160px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-title {
+        min-height: 180px;
+      }
+    }
+
+    .hero-title .typewriter-line {
+      display: block;
+      line-height: 1.05;
+      /* FIX: En desktop, sin wrapping para que typewriter se vea fluido */
+      white-space: nowrap;
+    }
+
+    /* FIX: En mobile, permite wrapping para evitar desborde horizontal */
+    @media (max-width: 767px) {
+      .hero-title .typewriter-line {
+        white-space: normal;
+        word-break: break-word;
+      }
     }
   </style>
 </head>
 
-<body class="bg-white text-gray-900 antialiased">
+<body class="bg-white text-gray-900 antialiased min-h-screen flex flex-col">
 
-  <!-- HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md shadow-sm"
-    id="mainHeader">
+  <!-- CHANGED: Header now integrates with hero background -->
+  <!-- CHANGED: Header with fixed gradient and shadow, now STICKY -->
+  <header id="mainHeader" class="sticky top-0 z-50 border-b border-white/10
+           bg-gradient-to-r from-[#062b33] via-[#0b3f45] to-[#0c5660]
+           bg-opacity-100
+           shadow-[0_10px_30px_rgba(0,0,0,0.25)]
+           transition-all duration-300">
     <div class="container mx-auto px-4 md:px-6">
-      <div class="flex items-center justify-between py-3 md:py-4">
+      <div class="flex items-center justify-between py-2.5 lg:py-2">
         <!-- Logo -->
         <div class="flex-shrink-0">
-          <a href="#inicio" class="block">
-            <img src="{{ asset('assets/ceipp-logo.png') }}" alt="CEIPP Logo"
-              class="h-10 md:h-12 transition-all duration-300" id="headerLogo">
+          <a href="#inicio" class="flex items-center gap-3 group">
+            <span
+              class="inline-flex items-center justify-center rounded-xl bg-white/5 backdrop-blur-md ring-1 ring-white/10 px-3 py-2 transition-all duration-300 group-hover:bg-white/10">
+              <img src="{{ asset('assets/ceipp-logo.png') }}" alt="CEIPP Logo"
+                class="h-8 w-auto object-contain drop-shadow-md transition-all duration-300" id="headerLogo">
+            </span>
           </a>
         </div>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden lg:flex items-center gap-8" id="siteNav">
+        <!-- CHANGED: Desktop Navigation - white text for dark background -->
+        <!-- CHANGED: Desktop Navigation - active pills -->
+        <nav class="hidden lg:flex items-center gap-4 xl:gap-6 mx-auto" id="siteNav">
           <a href="#inicio"
-            class="text-gray-700 hover:text-[#0b3f45] transition-colors duration-300 text-sm font-semibold relative group">
+            class="nav-link text-white/90 hover:text-white transition-all duration-300 text-[13px] font-semibold relative">
             Inicio
-            <span
-              class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f1841a] transition-all duration-300 group-hover:w-full"></span>
           </a>
           <a href="#nosotros"
-            class="text-gray-700 hover:text-[#0b3f45] transition-colors duration-300 text-sm font-semibold relative group">
+            class="nav-link text-white/90 hover:text-white transition-all duration-300 text-[13px] font-semibold relative">
             Nosotros
-            <span
-              class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f1841a] transition-all duration-300 group-hover:w-full"></span>
           </a>
           <a href="#cursos"
-            class="text-gray-700 hover:text-[#0b3f45] transition-colors duration-300 text-sm font-semibold relative group">
+            class="nav-link text-white/90 hover:text-white transition-all duration-300 text-[13px] font-semibold relative">
             Cursos
-            <span
-              class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f1841a] transition-all duration-300 group-hover:w-full"></span>
           </a>
           <a href="#contactos"
-            class="text-gray-700 hover:text-[#0b3f45] transition-colors duration-300 text-sm font-semibold relative group">
+            class="nav-link text-white/90 hover:text-white transition-all duration-300 text-[13px] font-semibold relative">
             Contactos
-            <span
-              class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f1841a] transition-all duration-300 group-hover:w-full"></span>
           </a>
           <a href="#verificar"
-            class="text-gray-700 hover:text-[#0b3f45] transition-colors duration-300 text-sm font-semibold relative group">
+            class="nav-link text-white/90 hover:text-white transition-all duration-300 text-[13px] font-semibold relative">
             Verificar
-            <span
-              class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f1841a] transition-all duration-300 group-hover:w-full"></span>
           </a>
         </nav>
 
-        <!-- Desktop CTA Buttons -->
+        <!-- CHANGED: Desktop CTA Buttons - adapted for dark background -->
         <div class="hidden lg:flex items-center gap-3">
           <a href="{{ url('/login') }}" target="_blank" rel="noopener"
-            class="px-5 py-2 rounded-lg text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-all duration-300">
+            class="px-4 py-2 rounded-lg text-white/90 text-sm font-semibold hover:bg-white/10 transition-all duration-300">
             Iniciar Sesión
           </a>
           <a href="#registrarme"
-            class="px-5 py-2 rounded-lg bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white text-sm font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 hover:-translate-y-0.5">
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white text-sm font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 hover:-translate-y-0.5">
             Registrarme
           </a>
         </div>
 
-        <!-- Mobile Menu Toggle -->
-        <button class="lg:hidden text-gray-700 text-2xl p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          id="menuToggle" aria-label="Abrir menú">
+        <!-- CHANGED: Mobile Menu Toggle - white icon -->
+        <button class="lg:hidden text-white text-2xl p-2 hover:bg-white/10 rounded-lg transition-colors" id="menuToggle"
+          aria-label="Abrir menú">
           <span id="menuIcon">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -120,32 +201,32 @@
         </button>
       </div>
 
-      <!-- Mobile Menu -->
+      <!-- CHANGED: Mobile Menu - dark background -->
       <div class="lg:hidden hidden overflow-hidden transition-all duration-300" id="mobileMenu">
-        <nav class="py-4 space-y-1 border-t border-gray-100">
+        <nav class="py-4 space-y-1 border-t border-white/10">
           <a href="#inicio"
-            class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#0b3f45] rounded-lg transition-all duration-200 font-medium">
+            class="nav-link-mobile block px-4 py-3 text-white/90 hover:bg-white/10 hover:text-[#f1841a] rounded-lg transition-all duration-200 font-medium">
             Inicio
           </a>
           <a href="#nosotros"
-            class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#0b3f45] rounded-lg transition-all duration-200 font-medium">
+            class="nav-link-mobile block px-4 py-3 text-white/90 hover:bg-white/10 hover:text-[#f1841a] rounded-lg transition-all duration-200 font-medium">
             Nosotros
           </a>
           <a href="#cursos"
-            class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#0b3f45] rounded-lg transition-all duration-200 font-medium">
+            class="nav-link-mobile block px-4 py-3 text-white/90 hover:bg-white/10 hover:text-[#f1841a] rounded-lg transition-all duration-200 font-medium">
             Cursos
           </a>
           <a href="#contactos"
-            class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#0b3f45] rounded-lg transition-all duration-200 font-medium">
+            class="nav-link-mobile block px-4 py-3 text-white/90 hover:bg-white/10 hover:text-[#f1841a] rounded-lg transition-all duration-200 font-medium">
             Contactos
           </a>
           <a href="#verificar"
-            class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-[#0b3f45] rounded-lg transition-all duration-200 font-medium">
+            class="nav-link-mobile block px-4 py-3 text-white/90 hover:bg-white/10 hover:text-[#f1841a] rounded-lg transition-all duration-200 font-medium">
             Verificar
           </a>
-          <div class="pt-4 space-y-2 border-t border-gray-100 mt-2">
+          <div class="pt-4 space-y-2 border-t border-white/10 mt-2">
             <a href="{{ url('/login') }}" target="_blank" rel="noopener"
-              class="block px-4 py-3 text-center rounded-lg text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-200">
+              class="block px-4 py-3 text-center rounded-lg text-white/90 font-semibold hover:bg-white/10 transition-all duration-200">
               Iniciar Sesión
             </a>
             <a href="#registrarme"
@@ -158,10 +239,9 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section
-    class="relative min-h-screen bg-gradient-to-br from-[#0b3f45] via-[#0c5660] to-[#0b3f45] overflow-hidden pt-20 md:pt-24"
-    id="inicio">
+  <!-- HERO SECTION: Premium Layout (Header + Hero = 100vh) -->
+  <section class="hero relative flex flex-col justify-center flex-1 overflow-hidden bg-[#062b33]" id="inicio"
+    style="min-height: calc(100vh - var(--header-h));">
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-10 pointer-events-none">
       <div class="absolute inset-0"
@@ -169,48 +249,52 @@
       </div>
     </div>
 
-    <!-- Hero Image Background (Parallax) -->
+    <!-- CHANGED: Hero Image Background - full opacity for active image -->
     <div class="hero-image parallax-bg absolute inset-0 z-0">
-      <img
-        class="hero-frame hero-frame-1 active absolute inset-0 w-full h-full object-cover object-center opacity-30 transition-opacity duration-[1800ms]"
+      <img class="hero-frame hero-frame-1 active absolute inset-0 w-full h-full object-cover object-center"
         src="{{ asset('img/hero.png') }}" alt="Profesionales en certificación"
         onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(135deg, #0b3f45 0%, #0c5660 100%)'">
-      <img
-        class="hero-frame hero-frame-2 absolute inset-0 w-full h-full object-cover object-center opacity-0 transition-opacity duration-[1800ms]"
+      <img class="hero-frame hero-frame-2 absolute inset-0 w-full h-full object-cover object-center"
         src="{{ asset('img/hero2.png') }}" alt="Profesionales en certificación 2" onerror="this.style.display='none'">
     </div>
 
-    <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#0b3f45]/85 via-[#0b3f45]/60 to-[#0b3f45]/30 z-10"></div>
+    <!-- CHANGED: Overlay -> specific premium gradient requested -->
+    <div class="hero-overlay absolute inset-0 z-10 bg-gradient-to-r from-[#0b3f45]/70 via-[#0b3f45]/35 to-transparent">
+    </div>
 
-    <!-- Content -->
-    <div class="container mx-auto px-4 md:px-6 relative z-20">
-      <div class="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-5rem)] py-12">
-        <!-- Text Content -->
-        <div class="text-white space-y-6">
-          <div
-            class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-            <svg class="w-4 h-4 text-[#f1841a]" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-            </svg>
-            <span class="text-xs font-semibold uppercase tracking-wider">Centro Internacional de Certificación</span>
-          </div>
+    <!-- extra overlay leve arriba para efecto “barra” -->
+    <div
+      class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-[#0b3f45]/40 via-transparent to-transparent">
+    </div>
 
-          <h1 class="hero-title font-black text-3xl md:text-4xl lg:text-5xl leading-tight">
-            <span id="typewriter-text-1" class="typewriter-line block"></span>
+    <!-- CHANGED: Content fits in viewport, better spacing -->
+    <div class="container mx-auto px-4 md:px-6 relative z-20 h-full">
+      <div class="hero-content flex items-center h-full">
+        <div class="hero-text text-white max-w-3xl py-8 md:py-10">
+          <!-- 1. Eyebrow Text -->
+          <span
+            class="eyebrow animate-fade-in inline-block text-sm font-semibold uppercase tracking-widest text-white/80 mb-4">
+            Centro Internacional de Certificación
+          </span>
+
+          <!-- CHANGED: H1 optimized for 3-line layout -->
+          <!-- CHANGED: H1 optimized for 3-line layout - Text reduced to fit without wrapping -->
+          <h1 class="hero-title font-black text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-5 max-w-4xl tracking-tight">
+            <span id="typewriter-text-1" class="typewriter-line block text-white"></span>
             <span id="typewriter-text-2"
-              class="typewriter-line block bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] bg-clip-text text-transparent"></span>
+              class="typewriter-line highlight block bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] bg-clip-text text-transparent"></span>
           </h1>
 
-          <p class="hero-lead text-base md:text-lg text-white/90 max-w-2xl leading-relaxed opacity-0">
-            Mejora tu perfil profesional con nuestras certificaciones avaladas. Alianzas con universidades y empresas
-            líderes.
+          <!-- CHANGED: Lead text with better spacing -->
+          <p class="hero-lead animate-fade-in delay-2 text-lg md:text-xl text-white/90 leading-relaxed mb-8 max-w-2xl">
+            Mejora tu perfil profesional con nuestras certificaciones avaladas.<br>
+            Alianzas con universidades y empresas líderes.
           </p>
 
-          <div class="hero-actions flex flex-wrap gap-4 pt-4">
+          <!-- CHANGED: Buttons matching reference design -->
+          <div class="hero-actions flex flex-wrap gap-4 mb-10">
             <a href="#cursos"
-              class="animate-left group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white rounded-xl font-semibold text-base hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1 opacity-0">
+              class="btn-primary btn-large animate-left delay-3 inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white rounded-xl font-bold text-base hover:shadow-2xl hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1">
               Ver Cursos
               <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -219,62 +303,54 @@
               </svg>
             </a>
             <a href="#contactos"
-              class="animate-right inline-flex items-center gap-2 px-8 py-4 border-2 border-white/30 backdrop-blur-sm text-white rounded-xl font-semibold text-base hover:bg-white/10 hover:border-white transition-all duration-300 opacity-0">
+              class="btn-secondary btn-large animate-right delay-3 inline-flex items-center gap-2 px-8 py-4 border-2 border-white/40 backdrop-blur-sm text-white rounded-xl font-bold text-base hover:bg-white/10 hover:border-white transition-all duration-300">
               Contactarnos
             </a>
           </div>
 
-          <div class="hero-stats grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
-            <div class="stat-item opacity-0">
-              <div class="text-3xl md:text-4xl font-bold text-[#f1841a]">+120</div>
-              <div class="text-xs md:text-sm text-white/80 mt-1">Programas</div>
+          <!-- Stats with sleek look -->
+          <div class="hero-stats flex flex-wrap gap-8 pt-8 border-t border-white/10">
+            <div class="stat-item animate-fade-in delay-1">
+              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">+120</span>
+              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Programas</span>
             </div>
-            <div class="stat-item opacity-0">
-              <div class="text-3xl md:text-4xl font-bold text-[#f1841a]">100%</div>
-              <div class="text-xs md:text-sm text-white/80 mt-1">Certificado</div>
+            <div class="stat-item animate-fade-in delay-2">
+              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">100%</span>
+              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Online y En Vivo</span>
             </div>
-            <div class="stat-item opacity-0">
-              <div class="text-3xl md:text-4xl font-bold text-[#f1841a]">24/7</div>
-              <div class="text-xs md:text-sm text-white/80 mt-1">Soporte</div>
+            <div class="stat-item animate-fade-in delay-3">
+              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">INTL</span>
+              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Certificación</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Logo Column (Desktop only) -->
-        <div class="hidden lg:flex items-center justify-center">
-          <div class="hero-image-container relative w-full max-w-[520px] lg:max-w-[640px] mx-auto">
-            <img
-              class="hero-frame hero-frame-1 active w-full h-auto object-contain opacity-0 transition-opacity duration-[1800ms]"
-              src="{{ asset('img/hero.png') }}" alt="Profesionales en certificación"
-              onerror="this.style.display='none'">
-            <img
-              class="hero-frame hero-frame-2 absolute inset-0 w-full h-auto object-contain opacity-0 transition-opacity duration-[1800ms]"
-              src="{{ asset('img/hero2.png') }}" alt="Profesionales en certificación 2"
-              onerror="this.style.display='none'">
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-      <svg class="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-      </svg>
-    </div>
+      <!-- Scroll indicator -->
+      <a href="#servicios"
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce p-2 text-white/40 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </a>
   </section>
 
   <!-- SERVICES -->
-  <section class="py-20 md:py-28 bg-gradient-to-b from-white to-gray-50" id="servicios" data-animate>
-    <div class="container mx-auto px-4 md:px-6">
-      <div class="text-center max-w-3xl mx-auto mb-16">
+  <section class="py-24 bg-white relative" id="servicios" data-animate>
+    <!-- Decorated background element -->
+    <div
+      class="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-teal-50 to-transparent rounded-bl-full opacity-50 pointer-events-none">
+    </div>
+
+    <div class="container mx-auto px-4 md:px-6 relative z-10">
+      <div class="text-center max-w-2xl mx-auto mb-16">
         <span
-          class="inline-block px-4 py-2 bg-[#f1841a]/10 text-[#f1841a] rounded-full text-sm font-semibold mb-4">Nuestros
-          Servicios</span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Formación Profesional de Excelencia
-        </h2>
-        <p class="text-lg text-gray-600">Cursos certificados, diplomados especializados y eventos prácticos para
-          impulsar tu carrera.</p>
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wide mb-4 border border-teal-100">
+          <span class="w-1.5 h-1.5 rounded-full bg-teal-500"></span> Nuestos Servicios
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Formación de
+          Excelencia</h2>
+        <p class="text-lg text-slate-600">Impulsamos tu carrera con programas certificados y metodología práctica.</p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -373,129 +449,45 @@
   </section>
 
   <!-- NOSOTROS -->
-  <section class="py-20 md:py-28 bg-white" id="nosotros" data-animate>
-    <div class="container mx-auto px-4 md:px-6">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span
-          class="inline-block px-4 py-2 bg-[#0c5660]/10 text-[#0c5660] rounded-full text-sm font-semibold mb-4">Sobre
-          Nosotros</span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Nuestra Misión y Visión</h2>
-        <p class="text-lg text-gray-600">Comprometidos con la excelencia educativa y el desarrollo profesional.</p>
+  <section class="py-24 bg-slate-50 relative overflow-hidden" id="nosotros" data-animate>
+    <div class="container mx-auto px-4 md:px-6 relative z-10">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wide mb-4 border border-slate-300">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Sobre Nosotros
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Misión y Visión</h2>
+        <p class="text-lg text-slate-600">Comprometidos con la excelencia educativa y el desarrollo profesional en el Perú.</p>
       </div>
 
-      <!-- Mission & Vision -->
-      <div class="grid md:grid-cols-2 gap-8 mb-16">
-        <div
-          class="group relative bg-gradient-to-br from-[#0b3f45] to-[#0c5660] rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2"
-          data-animate-card>
-          <div class="absolute inset-0 opacity-20">
-            <img src="{{ asset('assets/mision.png') }}" alt="Misión" class="w-full h-full object-cover"
-              onerror="this.style.display='none'">
+      <!-- Mission & Vision Cards -->
+      <div class="grid md:grid-cols-2 gap-8 mb-20">
+        <!-- Mission -->
+        <div class="group relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1" data-animate-card>
+          <div class="absolute inset-0 bg-[#062b33]"></div>
+          <div class="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+             <img src="{{ asset('assets/mision.png') }}" alt="Misión" class="w-full h-full object-cover">
           </div>
-          <div class="relative p-8 md:p-10 text-white">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
+          <div class="relative p-10 text-white h-full flex flex-col">
+            <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-6">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
             </div>
-            <span class="text-sm font-semibold uppercase tracking-wider text-white/80 mb-3 block">Nuestra</span>
-            <h3 class="text-2xl md:text-3xl font-bold mb-4">MISIÓN</h3>
-            <p class="text-white/90 leading-relaxed">
-              Somos una empresa académica dedicada a brindar capacitaciones a profesionales y técnicos en los temas más
-              relevantes de la actualidad, complementando el aprendizaje y fortaleciendo competencias para una mayor
-              competitividad laboral.
-            </p>
+            <h3 class="text-2xl font-bold mb-4 tracking-tight">Nuestra Misión</h3>
+            <p class="text-white/80 leading-relaxed text-lg">Somos una empresa académica dedicada a brindar capacitaciones a profesionales y técnicos, fortaleciendo competencias para una mayor competitividad laboral.</p>
           </div>
         </div>
 
-        <div
-          class="group relative bg-gradient-to-br from-[#f1841a] to-[#ff9a3d] rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2"
-          data-animate-card>
-          <div class="absolute inset-0 opacity-20">
-            <img src="{{ asset('assets/vision.png') }}" alt="Visión" class="w-full h-full object-cover"
-              onerror="this.style.display='none'">
+        <!-- Vision -->
+        <div class="group relative rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1" data-animate-card>
+          <div class="absolute inset-0 bg-gradient-to-br from-[#f1841a] to-[#ff9a3d]"></div>
+          <div class="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+             <img src="{{ asset('assets/vision.png') }}" alt="Visión" class="w-full h-full object-cover">
           </div>
-          <div class="relative p-8 md:p-10 text-white">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                </path>
-              </svg>
+          <div class="relative p-10 text-white h-full flex flex-col">
+             <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-6">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
             </div>
-            <span class="text-sm font-semibold uppercase tracking-wider text-white/80 mb-3 block">Nuestra</span>
-            <h3 class="text-2xl md:text-3xl font-bold mb-4">VISIÓN</h3>
-            <p class="text-white/90 leading-relaxed">
-              Ser una plataforma moderna y sostenible en capacitaciones, que promueva el aprendizaje autónomo y
-              complemente el conocimiento profesional mediante contenidos actualizados.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Features -->
-      <div class="grid md:grid-cols-3 gap-8">
-        <div
-          class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1"
-          data-animate-card>
-          <div
-            class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0c5660]/10 to-[#0c5660]/5 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-[#0c5660]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
-              </path>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-3">Formación práctica</h3>
-          <p class="text-gray-600 text-sm mb-4 leading-relaxed">Clases con enfoque laboral, casos reales, proyectos y
-            acompañamiento.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1 bg-[#0c5660]/10 text-[#0c5660] text-xs font-medium rounded-full">Modalidad
-              Online</span>
-            <span class="px-3 py-1 bg-[#f1841a]/10 text-[#f1841a] text-xs font-medium rounded-full">Soporte 24/7</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1"
-          data-animate-card>
-          <div
-            class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f1841a]/10 to-[#f1841a]/5 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-[#f1841a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-              </path>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-3">Certificación verificable</h3>
-          <p class="text-gray-600 text-sm mb-4 leading-relaxed">Certificados con código de verificación y respaldo
-            institucional.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1 bg-[#0c5660]/10 text-[#0c5660] text-xs font-medium rounded-full">Verificación</span>
-            <span class="px-3 py-1 bg-[#f1841a]/10 text-[#f1841a] text-xs font-medium rounded-full">Transparencia</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1"
-          data-animate-card>
-          <div
-            class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0c5660]/10 to-[#0c5660]/5 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6 text-[#0c5660]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-              </path>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-3">Convenios y alianzas</h3>
-          <p class="text-gray-600 text-sm mb-4 leading-relaxed">Alianzas con universidades y empresas para fortalecer
-            credibilidad y empleabilidad.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1 bg-[#0c5660]/10 text-[#0c5660] text-xs font-medium rounded-full">Empresas</span>
-            <span class="px-3 py-1 bg-[#f1841a]/10 text-[#f1841a] text-xs font-medium rounded-full">Universidades</span>
+            <h3 class="text-2xl font-bold mb-4 tracking-tight">Nuestra Visión</h3>
+            <p class="text-white/80 leading-relaxed text-lg">Ser la plataforma líder en capacitación moderna y sostenible, promoviendo el aprendizaje autónomo con contenidos actualizados.</p>
           </div>
         </div>
       </div>
@@ -503,48 +495,35 @@
   </section>
 
   <!-- CURSOS -->
-  <section class="py-20 md:py-28 bg-gradient-to-b from-gray-50 to-white" id="cursos" data-animate>
+  <section class="py-24 bg-white" id="cursos" data-animate>
     <div class="container mx-auto px-4 md:px-6">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span
-          class="inline-block px-4 py-2 bg-[#f1841a]/10 text-[#f1841a] rounded-full text-sm font-semibold mb-4">Nuestros
-          Programas</span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Cursos y Certificaciones</h2>
-        <p class="text-lg text-gray-600">Explora nuestros programas disponibles y comienza tu transformación
-          profesional.</p>
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-orange-600 text-xs font-bold uppercase tracking-wide mb-4 border border-orange-100">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Programas
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Cursos y Certificaciones</h2>
+        <p class="text-lg text-slate-600">Explora nuestra oferta académica y especialízate con los mejores.</p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         @foreach ($courses as $row)
-          <article
-            class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:-translate-y-2"
-            data-animate-card>
-            <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#0b3f45] to-[#0c5660]">
-              <img src="{{ $row->image_url }}"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                alt="{{ $row->titulo }}" data-fallback="{{ asset('assets/gestion_publica.png') }}"
-                onerror="this.style.opacity='0.3'">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <span
-                class="absolute top-4 right-4 px-3 py-1 bg-[#f1841a] text-white text-xs font-semibold rounded-full shadow-lg">
-                {{ $row->subtitulo }}
-              </span>
+          <article class="group bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1" data-animate-card>
+            <div class="relative h-56 overflow-hidden">
+              <img src="{{ $row->image_url }}" 
+                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                   alt="{{ $row->titulo }}" 
+                   onerror="this.style.opacity='0.3'; this.parentElement.style.backgroundColor='#062b33'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+              <span class="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-full shadow-sm">{{ $row->subtitulo }}</span>
             </div>
-
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#0c5660] transition-colors line-clamp-2">
-                {{ $row->titulo }}
-              </h3>
-              <div class="text-gray-600 text-sm mb-6 leading-relaxed line-clamp-3">
-                {!! $row->description !!}
-              </div>
-              <a href="#contactos"
-                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group">
-                Solicitar info
-                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            
+            <div class="p-8">
+              <h3 class="text-xl font-bold text-slate-900 mb-3 line-clamp-2 leading-tight group-hover:text-[#0c5660] transition-colors">{{ $row->titulo }}</h3>
+              <div class="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed opacity-90">{!! $row->description !!}</div>
+              
+              <a href="#contactos" class="inline-flex w-full items-center justify-center gap-2 px-6 py-3 bg-slate-50 text-slate-700 rounded-xl font-semibold text-sm hover:bg-[#f1841a] hover:text-white transition-all duration-300 group-btn">
+                Solicitar Información
+                <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
               </a>
             </div>
           </article>
@@ -554,14 +533,14 @@
   </section>
 
   <!-- CONTACTOS -->
-  <section class="py-20 md:py-28 bg-white" id="contactos" data-animate>
+  <section class="py-24 bg-slate-50 relative" id="contactos" data-animate>
     <div class="container mx-auto px-4 md:px-6">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span
-          class="inline-block px-4 py-2 bg-[#0c5660]/10 text-[#0c5660] rounded-full text-sm font-semibold mb-4">Contáctanos</span>
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">¿Listo para comenzar?</h2>
-        <p class="text-lg text-gray-600">Envíanos tus datos para inscripción, información de cursos o propuesta de
-          convenio institucional.</p>
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wide mb-4 border border-slate-300">
+           <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Contáctanos
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">¿Listo para empezar?</h2>
+        <p class="text-lg text-slate-600">Escríbenos para recibir información detallada sobre nuestros programas o convenios.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-12">
