@@ -99,18 +99,18 @@
      */
     .hero-title {
       /* FIX: Reservar altura fija para 2-3 líneas, evita saltos al cambiar texto */
-      min-height: 140px;
+      min-height: 96px;
     }
 
     @media (min-width: 768px) {
       .hero-title {
-        min-height: 160px;
+        min-height: 110px;
       }
     }
 
     @media (min-width: 1024px) {
       .hero-title {
-        min-height: 180px;
+        min-height: 120px;
       }
     }
 
@@ -135,12 +135,12 @@
 
   <!-- CHANGED: Header now integrates with hero background -->
   <!-- CHANGED: Header with fixed gradient and shadow, now STICKY -->
-  <header id="mainHeader" class="sticky top-0 z-50 border-b border-white/10
+  <header id="mainHeader" class="sticky top-0 z-50
            bg-gradient-to-r from-[#062b33] via-[#0b3f45] to-[#0c5660]
            bg-opacity-100
            shadow-[0_10px_30px_rgba(0,0,0,0.25)]
            transition-all duration-300">
-    <div class="container mx-auto px-4 md:px-6">
+    <div class="container mx-auto max-w-7xl px-4 md:px-6">
       <div class="flex items-center justify-between py-2.5 lg:py-2">
         <!-- Logo -->
         <div class="flex-shrink-0">
@@ -267,10 +267,10 @@
       class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-[#0b3f45]/40 via-transparent to-transparent">
     </div>
 
-    <!-- CHANGED: Content fits in viewport, better spacing -->
-    <div class="container mx-auto px-4 md:px-6 relative z-20 h-full">
+    <!-- CHANGED: Content fits in viewport, better spacing, max-w-6xl for premium feel -->
+    <div class="container mx-auto max-w-7xl px-4 md:px-6 relative z-20 h-full">
       <div class="hero-content flex items-center h-full">
-        <div class="hero-text text-white max-w-3xl py-8 md:py-10">
+        <div class="hero-text text-white max-w-2xl lg:max-w-3xl py-8 md:py-10 lg:pl-3 xl:pl-6">
           <!-- 1. Eyebrow Text -->
           <span
             class="eyebrow animate-fade-in inline-block text-sm font-semibold uppercase tracking-widest text-white/80 mb-4">
@@ -279,14 +279,14 @@
 
           <!-- CHANGED: H1 optimized for 3-line layout -->
           <!-- CHANGED: H1 optimized for 3-line layout - Text reduced to fit without wrapping -->
-          <h1 class="hero-title font-black text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-5 max-w-4xl tracking-tight">
+          <h1 class="hero-title font-black text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-3 max-w-4xl tracking-tight">
             <span id="typewriter-text-1" class="typewriter-line block text-white"></span>
             <span id="typewriter-text-2"
               class="typewriter-line highlight block bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] bg-clip-text text-transparent"></span>
           </h1>
 
           <!-- CHANGED: Lead text with better spacing -->
-          <p class="hero-lead animate-fade-in delay-2 text-lg md:text-xl text-white/90 leading-relaxed mb-8 max-w-2xl">
+          <p class="hero-lead animate-fade-in delay-2 text-lg md:text-xl text-white/90 leading-relaxed mb-6 max-w-2xl">
             Mejora tu perfil profesional con nuestras certificaciones avaladas.<br>
             Alianzas con universidades y empresas líderes.
           </p>
@@ -308,19 +308,39 @@
             </a>
           </div>
 
-          <!-- Stats with sleek look -->
-          <div class="hero-stats flex flex-wrap gap-8 pt-8 border-t border-white/10">
-            <div class="stat-item animate-fade-in delay-1">
-              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">+120</span>
-              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Programas</span>
+          <!-- STATS: Premium Glass Cards -->
+          <div class="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 max-w-xl animate-fade-in delay-3">
+            <!-- Stat 1 -->
+            <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.22)] hover:bg-white/15 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl md:text-3xl font-extrabold text-[#ff9a3d] leading-none">+120</span>
+                <div class="leading-tight">
+                  <p class="text-[11px] uppercase tracking-wider text-white/60 font-semibold">Programas</p>
+                  <p class="text-xs text-white/85 font-medium">Cursos y diplomados</p>
+                </div>
+              </div>
             </div>
-            <div class="stat-item animate-fade-in delay-2">
-              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">100%</span>
-              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Online y En Vivo</span>
+
+            <!-- Stat 2 -->
+            <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.22)] hover:bg-white/15 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl md:text-3xl font-extrabold text-[#ff9a3d] leading-none">100%</span>
+                <div class="leading-tight">
+                  <p class="text-[11px] uppercase tracking-wider text-white/60 font-semibold">Online</p>
+                  <p class="text-xs text-white/85 font-medium">y en vivo</p>
+                </div>
+              </div>
             </div>
-            <div class="stat-item animate-fade-in delay-3">
-              <span class="block text-3xl md:text-4xl font-bold text-[#ff9a3d] mb-1">INTL</span>
-              <span class="text-xs uppercase tracking-wider text-white/60 font-semibold">Certificación</span>
+
+            <!-- Stat 3 -->
+            <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.22)] col-span-2 lg:col-span-1 hover:bg-white/15 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl md:text-3xl font-extrabold text-[#ff9a3d] leading-none">INTL</span>
+                <div class="leading-tight">
+                  <p class="text-[11px] uppercase tracking-wider text-white/60 font-semibold">Certificación</p>
+                  <p class="text-xs text-white/85 font-medium">Verificable</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
