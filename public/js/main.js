@@ -57,10 +57,19 @@ class Typewriter {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("CEIPP App Initialized");
 
-    // --- DOM Elements ---
     const header = document.getElementById("mainHeader");
     const heroImage = document.querySelector(".parallax-bg");
     const navAnchors = document.querySelectorAll('#siteNav a[href^="#"], #mobileMenu a[href^="#"]');
+
+    // Logo Click Action (Clean URL + Smooth Scroll)
+    const logoBtn = document.getElementById('logoBtn');
+    if (logoBtn) {
+        logoBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        });
+    }
 
     // --- State ---
     let headerHeight = 80;
@@ -151,6 +160,52 @@ document.addEventListener("DOMContentLoaded", function () {
         // re-run mobile check for typewriter
         checkMobileTypewriter();
     }, 100));
+
+    // ==================== SMOOTH SCROLL (Clean URL) ====================
+    function smoothScrollToSection(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        // Calculate offset (header height + extra padding)
+        const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 80;
+        const y = el.getBoundingClientRect().top + window.pageYOffset - headerH;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+
+        // ✅ Borra el hash visible en la URL para look más limpio
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+
+    // Attach to all nav anchors
+    navAnchors.forEach(link => {
+        link.addEventListener("click", (e) => {
+            const href = link.getAttribute("href");
+            if (!href || href === "#" || !href.startsWith("#")) return;
+
+            e.preventDefault();
+
+            // Special case for "Inicio" (top of page)
+            if (href === "#inicio") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                history.replaceState(null, "", window.location.pathname + window.location.search);
+            } else {
+                const id = href.slice(1);
+                smoothScrollToSection(id);
+            }
+
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById("mobileMenu");
+            const menuToggle = document.getElementById("menuToggle");
+
+            if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
+                mobileMenu.classList.add("hidden");
+                // Reset icon
+                if (menuToggle) {
+                    menuToggle.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+                }
+            }
+        });
+    });
 
     // Initial calls
     syncHeaderHeight();
