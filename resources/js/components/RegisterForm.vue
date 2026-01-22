@@ -1,6 +1,6 @@
 <template>
-    <div class="space-y-4" v-cloak>
-        <div class="grid md:grid-cols-2 gap-3">
+    <div class="space-y-3" v-cloak>
+        <div class="grid md:grid-cols-2 gap-2">
             <div>
                 <label for="regDni" class="block text-xs font-bold text-gray-900 mb-1 uppercase tracking-wide">N° DNI</label>
                 <div class="relative">
@@ -14,7 +14,7 @@
                         placeholder="N° DNI"
                         v-model="form.number"
                         @input="handleDniInput"
-                        class="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
                     />
                 </div>
             </div>
@@ -32,13 +32,13 @@
                         placeholder="Nombres y Apellidos"
                         v-model="form.full_name"
                         :readonly="true"
-                        class="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed text-sm"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed text-sm"
                     />
                 </div>
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-3">
+        <div class="grid md:grid-cols-2 gap-2">
             <div>
                 <label for="regEmail" class="block text-xs font-bold text-gray-900 mb-1 uppercase tracking-wide">Correo</label>
                 <div class="relative">
@@ -52,7 +52,7 @@
                         type="email"
                         placeholder="correo@dominio.com"
                         v-model="form.email"
-                        class="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
                     />
                 </div>
             </div>
@@ -70,18 +70,18 @@
                         id="regPhone"
                         placeholder="999 999 999"
                         v-model="form.phone"
-                        class="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:border-[#0c5660] focus:ring-2 focus:ring-[#0c5660]/10 outline-none transition-all duration-300 text-sm text-gray-900"
                     />
                 </div>
             </div>
         </div>
 
-        <div class="flex items-center gap-3 pt-2">
+        <div class="flex items-center gap-3 pt-1">
             <button
                 type="button"
                 @click="submit"
                 :disabled="loadingSubmit"
-                class="w-full px-6 py-3 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:-translate-y-0.5"
+                class="w-full px-6 py-2.5 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
                 <svg v-if="loadingSubmit" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

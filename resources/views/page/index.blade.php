@@ -8,7 +8,7 @@
   {{-- ✅ CSRF para axios POST --}}
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('assets/logo.png') }}">
   <title>CEIPP | Certificaciones Profesionales</title>
 
   <meta name="description"
@@ -21,7 +21,7 @@
     content="Cursos, diplomados y certificaciones con respaldo institucional. Mejora tu perfil profesional con CEIPP.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ url('/') }}">
-  <meta property="og:image" content="{{ asset('assets/ceipp-logo.png') }}">
+  <meta property="og:image" content="{{ asset('assets/logo.png') }}">
 
   <link rel="stylesheet" href="{{ mix('css/tailwind.css') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -98,19 +98,19 @@
      * - min-height reserva espacio para evitar "saltos" de layout al cambiar slides
      */
     .hero-title {
-      /* FIX: Reservar altura fija para 2-3 líneas, evita saltos al cambiar texto */
-      min-height: 96px;
+      /* FIX: Reservar altura fija reducida */
+      min-height: 80px;
     }
 
     @media (min-width: 768px) {
       .hero-title {
-        min-height: 110px;
+        min-height: 90px;
       }
     }
 
     @media (min-width: 1024px) {
       .hero-title {
-        min-height: 120px;
+        min-height: 100px;
       }
     }
 
@@ -148,7 +148,7 @@
             <button type="button" id="logoBtn" class="flex items-center gap-3 group" aria-label="Ir al inicio">
               <span
                 class="inline-flex items-center justify-center rounded-xl bg-white/5 backdrop-blur-md ring-1 ring-white/10 px-3 py-2 transition-all duration-300 group-hover:bg-white/10">
-                <img src="{{ asset('assets/ceipp-logo.png') }}" alt="CEIPP Logo"
+                <img src="{{ asset('assets/logo-header.png') }}" alt="CEIPP Logo"
                   class="h-8 w-auto object-contain drop-shadow-md transition-all duration-300" id="headerLogo">
               </span>
             </button>
@@ -253,42 +253,61 @@
 
       <!-- CHANGED: Content fits in viewport, better spacing, max-w-6xl for premium feel -->
       <div class="container mx-auto max-w-7xl px-4 md:px-6 relative z-20 h-full">
-      <div class="container mx-auto max-w-7xl px-4 md:px-6 relative z-20 h-full">
-        <!-- CHANGED: Grid layout pushing everything to the right -->
         <div class="grid lg:grid-cols-12 gap-8 h-full items-center">
 
-          <!-- LEFT: Texto + Form (8/12) -->
-          <div class="lg:col-span-8 flex flex-col gap-6 justify-center">
-
-            <!-- Texto -->
+          <!-- IZQUIERDA: Texto -->
+          <div class="lg:col-span-7 flex flex-col gap-6 justify-center h-full pt-6 lg:pt-0">
             <div class="hero-text text-white text-left">
-              <span class="eyebrow animate-fade-in inline-block text-xs font-bold uppercase tracking-widest text-white/80 mb-3">
-                <span class="text-[#f1841a] mr-2">●</span> Centro Internacional
+              <span
+                class="eyebrow animate-fade-in inline-block text-xs font-bold uppercase tracking-widest text-white/80 mb-3">
+                Centro Internacional de certificación
               </span>
 
-              <h1 class="hero-title font-black text-3xl md:text-3xl lg:text-4xl leading-tight mb-4 tracking-tight">
+              <h1 class="hero-title font-black text-3xl md:text-3xl lg:text-4xl leading-tight mb-2 tracking-tight">
                 <span id="typewriter-text-1" class="typewriter-line block text-white"></span>
-                <span id="typewriter-text-2" class="typewriter-line highlight block bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] bg-clip-text text-transparent"></span>
+                <span id="typewriter-text-2"
+                  class="typewriter-line highlight block bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] bg-clip-text text-transparent"></span>
               </h1>
 
-              <p class="hero-lead animate-fade-in delay-2 text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-xl">
+              <p
+                class="hero-lead animate-fade-in delay-2 text-base md:text-lg text-white/90 leading-relaxed mb-6 max-w-xl">
                 Mejora tu perfil profesional con nuestras certificaciones avaladas. Alianzas con universidades líderes.
               </p>
-            </div>
 
-            <!-- Form Card -->
-            <div class="w-full animate-fade-in delay-3">
-              <div class="rounded-3xl bg-white/10 backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-6 md:p-6 max-w-2xl">
-                <div class="mb-3 flex items-center justify-between">
+              <!-- New Buttons -->
+              <div class="flex flex-wrap gap-4 animate-fade-in delay-2">
+                <a href="#cursos"
+                  class="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#f1841a] to-[#ff9a3d] text-white font-bold rounded-xl hover:shadow-[0_10px_30px_rgba(241,132,26,0.3)] transition-all duration-300 transform hover:-translate-y-1">
+                  <span>Ver Cursos</span>
+                  <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                  </svg>
+                </a>
+                <a href="#contactos"
+                  class="inline-flex items-center gap-2 px-6 py-3 border border-white/20 text-white font-bold rounded-xl hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300">
+                  <span>Contactarnos</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- DERECHA: Form abajo -->
+          <div class="lg:col-span-5 h-full flex flex-col justify-end pb-0 lg:pb-0 lg:translate-y-32">
+            <div class="w-full animate-fade-in delay-3 lg:ml-auto lg:max-w-md">
+              <div
+                class="rounded-3xl bg-white/10 backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.35)] p-4 md:p-5">
+                <div class="mb-2 flex items-center justify-between">
                   <div>
-                    <h3 class="text-white text-lg font-bold leading-tight">Crea tu cuenta</h3>
-                    <p class="text-white/70 text-xs mt-0.5">Accede a programas y certificaciones.</p>
+                    <h3 class="text-white text-base font-bold leading-tight">Crea tu cuenta</h3>
+                    <p class="text-white/70 text-[11px] mt-0.5">Accede a programas y certificaciones.</p>
                   </div>
 
                   <div class="p-2 rounded-full bg-white/5 border border-white/10">
                     <svg class="w-4 h-4 text-[#f1841a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
                 </div>
@@ -296,17 +315,13 @@
                 <register-form></register-form>
               </div>
             </div>
-
           </div>
-
-          <!-- RIGHT: vacío (opcional) para “aire” -->
-          <div class="hidden lg:block lg:col-span-4"></div>
 
         </div>
 
         <!-- Scroll indicator -->
         <a href="#servicios"
-          class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce p-2 text-white/40 hover:text-white transition-colors">
+          class="absolute -bottom-24 left-1/2 -translate-x-1/2 z-20 animate-bounce p-2 text-white/40 hover:text-white transition-colors">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
           </svg>
